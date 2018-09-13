@@ -22,7 +22,7 @@ class MemList {
         // Level 0
         //
         MemList();
-
+	
         // Display the Free List
         //
         // Level 0
@@ -38,16 +38,19 @@ class MemList {
         /////////////////////////////////////////////////////////////////////////////////
         // Level 1 Methods
         /////////////////////////////////////////////////////////////////////////////////
-        // Parameterized constructor which create two lists of MemBlock 
+        // Parameterized constructor which creates two lists of MemBlock 
         // The Free List will contain a single MemBlock with all the memory(start_addr and mem_size)
         // The Reserved List will be empty
         //
         // MemList = new MemList(start_addr, mem_size);
         //
         // Level 1
-        //
-        MemList(unsigned int, unsigned int);
+        
 
+	MemList(unsigned int, unsigned int);
+	
+	
+	
         // Find the first MemBlock in the Free list which greater than or equal to the amount requested(via 
         // the function argument). Update the MemBlock in the Free List - change the start_addr and mem_size
         // by the amount of memory being reserved.
