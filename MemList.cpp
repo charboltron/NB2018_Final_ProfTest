@@ -172,7 +172,7 @@ unsigned int MemList::freeSize()
 // Removes the MemBlock provided(via the pointer) from the Reserved List and adds it
 // back into the Free List - it must be added back "in order of starting address".
 //
-// (Challenge) If the MemBlock to be freed does exist or it is a bad block(it overlaps 
+// (Challenge) If the MemBlock to be freed doesn't exist or it is a bad block(it overlaps 
 // with a block in the Free list), return false.  Otherwise return true.
 //
 // Level 2
@@ -181,9 +181,37 @@ bool MemList::freeMemBlock(MemBlock * block_to_free)
 {
     // To be implemented
 
-    	
+	if (block_to_free != reserved_head) {
 
-    return false;
+	MemBlock * current1 = reserved_head;
+
+	while(current1 != NULL && current1->getNext() != NULL && current1->getNext() != block_to_free) {
+	
+		current1 = current1->getNext();
+		}
+	current1->setNext(block_to_free->getNext()); 
+	}
+		
+	else {reserved_head->setNext(block_to_free->getNext());}
+
+
+	if(block_to_free->getAddr() < free_head->getAddr()) {
+
+		block_to_free->setNext(free_head);
+		free_head = block_to_free;
+	}
+		
+	else {  MemBlock * current = free_head;
+		
+		while (current!= NULL && current->getNext() != NULL && block_to_free->getAddr() > current->getNext()->getAddr()) {
+		
+			current = current->getNext();
+			}
+	
+		block_to_free->setNext(current->getNext());
+		current->setNext(block_to_free);
+		}
+    return true;
 }
 
 
@@ -195,6 +223,24 @@ bool MemList::freeMemBlock(MemBlock * block_to_free)
 MemBlock * MemList::maxFree() 
 {
     // To be implemented
+
+    MemBlock * current = free_head;
+
+    unsigned int max = 0; 
+
+	while(current->getNext() != NULL) {
+
+		if (current->getSize() > max) { max = current->getSize();}
+		current = current->getNext();
+	}
+	current = free_head;
+
+	while(current->getNext() != NULL) {
+		
+		if(current->getSize() == max) {return current;}
+		else current = current->getNext();
+	}
+	
     return NULL;
 }
 
@@ -205,6 +251,25 @@ MemBlock * MemList::maxFree()
 MemBlock * MemList::minFree()
 {
     // To be implemented
+
+    MemBlock * current = free_head;
+
+    unsigned int min = current->getSize();
+
+        while(current->getNext() != NULL) {
+
+                if (current->getSize() < min) { min = current->getSize();}
+                current = current->getNext();
+        }
+        current = free_head;
+
+        while(current->getNext() != NULL) {
+
+                if(current->getSize() == min) {return current;}
+                else current = current->getNext();
+        }
+	
+	
     return NULL;
 }
 
@@ -215,7 +280,16 @@ MemBlock * MemList::minFree()
 unsigned int MemList::freeBlockCount()
 {
     // To be implemented
-    return 0;
+
+    MemBlock * current = free_head;
+    unsigned int counter = 0;
+
+	while (current != NULL) { 
+		counter++;
+		current = current->getNext();
+		}	
+		
+    return counter;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
